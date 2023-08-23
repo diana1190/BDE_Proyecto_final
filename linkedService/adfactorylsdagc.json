@@ -1,0 +1,18 @@
+{
+	"name": "adfactorylsdagc",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "para el csv",
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "\\\\192.168.86.123\\\\Azure",
+			"userId": "dagutierrez1190@outlook.com",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJmMDA0YTE1NS1kNzA0LTRhMTUtYWI5NC1mYjA3OTQyNWIzNDgiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntime1dagc",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
