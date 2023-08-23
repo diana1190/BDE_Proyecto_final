@@ -1,0 +1,7 @@
+{
+	"name": "integrationRuntime2dagc",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "para proyecto"
+	}
+}

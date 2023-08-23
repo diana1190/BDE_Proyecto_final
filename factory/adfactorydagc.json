@@ -1,0 +1,9 @@
+{
+	"name": "adfactorydagc",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d82d7452-3d4c-4af3-86a0-51ce2d8420c7",
+		"tenantId": "0f78549d-3eec-43af-b56a-6f7b042d6c9a"
+	}
+}
