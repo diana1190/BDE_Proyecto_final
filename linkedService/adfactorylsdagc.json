@@ -6,9 +6,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "\\\\192.168.86.123\\\\Azure",
+			"host": "\\\\DESKTOP-C2OF8BL\\Azure",
 			"userId": "dagutierrez1190@outlook.com",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJmMDA0YTE1NS1kNzA0LTRhMTUtYWI5NC1mYjA3OTQyNWIzNDgiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhZTQwMDdmZS0zNmEzLTRlMTUtYjE1MC1iMDcwYjA4OWFmZGQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime1dagc",
