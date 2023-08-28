@@ -1,0 +1,19 @@
+{
+	"name": "adfactory_ls_sqldb_dagc",
+	"properties": {
+		"description": "Linked service to SQL database",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sql-ds-dagc.database.windows.net;Initial Catalog=AdventureWorksLT_dagc;User ID=diana.gutierrez",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "akv_dagc",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "kvs-dagc-dianagutierrez-user-sqldb"
+			}
+		}
+	}
+}
