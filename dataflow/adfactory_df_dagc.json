@@ -87,7 +87,7 @@
 				"          CustomerID_str = id,",
 				"          FirstName = firstname,",
 				"          LastName = lastname,",
-				"          EmailAdress = email",
+				"          EmailAddress = email",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectCSV",
