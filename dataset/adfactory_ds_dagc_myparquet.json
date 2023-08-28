@@ -1,0 +1,22 @@
+{
+	"name": "adfactory_ds_dagc_myparquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adls_dagc_proyecto",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "dp-bde-proyectofinal"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "raw"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
