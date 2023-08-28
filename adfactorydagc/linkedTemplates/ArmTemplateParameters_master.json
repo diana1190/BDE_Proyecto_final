@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfactorydagc"
+		},
+		"adfactory_ls_sqldb_dagc_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sql-ds-dagc.database.windows.net;Initial Catalog=AdventureWorksLT_dagc;User ID=diana.gutierrez"
+		},
+		"adfactoryls_abs_data_connectionString": {
+			"value": ""
+		},
+		"adfactorylsdagc_password": {
+			"value": ""
+		},
+		"adls_dagc_proyecto_accountKey": {
+			"value": ""
+		},
+		"adfactorylsdagc_properties_typeProperties_host": {
+			"value": "\\\\DESKTOP-C2OF8BL\\Azure"
+		},
+		"adfactorylsdagc_properties_typeProperties_userId": {
+			"value": "dagutierrez1190@outlook.com"
+		},
+		"adls_dagc_proyecto_properties_typeProperties_url": {
+			"value": "https://adlsproyectdagc.dfs.core.windows.net/"
+		},
+		"akv_dagc_properties_typeProperties_baseUrl": {
+			"value": "https://kv-dagc-proyectofinal.vault.azure.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

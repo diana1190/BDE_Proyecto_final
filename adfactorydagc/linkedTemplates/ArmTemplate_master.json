@@ -1,0 +1,99 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adfactorydagc"
+		},
+		"adfactory_ls_sqldb_dagc_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'adfactory_ls_sqldb_dagc'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sql-ds-dagc.database.windows.net;Initial Catalog=AdventureWorksLT_dagc;User ID=diana.gutierrez"
+		},
+		"adfactoryls_abs_data_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'adfactoryls_abs_data'"
+		},
+		"adfactorylsdagc_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'adfactorylsdagc'"
+		},
+		"adls_dagc_proyecto_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'adls_dagc_proyecto'"
+		},
+		"adfactorylsdagc_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\DESKTOP-C2OF8BL\\Azure"
+		},
+		"adfactorylsdagc_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "dagutierrez1190@outlook.com"
+		},
+		"adls_dagc_proyecto_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsproyectdagc.dfs.core.windows.net/"
+		},
+		"akv_dagc_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-dagc-proyectofinal.vault.azure.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adfactorydagc_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"adfactoryls_abs_data_connectionString": {
+						"value": "[parameters('adfactoryls_abs_data_connectionString')]"
+					},
+					"adls_dagc_proyecto_accountKey": {
+						"value": "[parameters('adls_dagc_proyecto_accountKey')]"
+					},
+					"adfactory_ls_sqldb_dagc_connectionString": {
+						"value": "[parameters('adfactory_ls_sqldb_dagc_connectionString')]"
+					},
+					"adfactorylsdagc_password": {
+						"value": "[parameters('adfactorylsdagc_password')]"
+					},
+					"adls_dagc_proyecto_properties_typeProperties_url": {
+						"value": "[parameters('adls_dagc_proyecto_properties_typeProperties_url')]"
+					},
+					"akv_dagc_properties_typeProperties_baseUrl": {
+						"value": "[parameters('akv_dagc_properties_typeProperties_baseUrl')]"
+					},
+					"adfactorylsdagc_properties_typeProperties_host": {
+						"value": "[parameters('adfactorylsdagc_properties_typeProperties_host')]"
+					},
+					"adfactorylsdagc_properties_typeProperties_userId": {
+						"value": "[parameters('adfactorylsdagc_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
