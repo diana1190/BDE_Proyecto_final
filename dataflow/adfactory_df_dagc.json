@@ -20,13 +20,28 @@
 					"name": "adfactorydfs2custparquet"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "adfactory_dagc_finalparquet",
+						"type": "DatasetReference"
+					},
+					"name": "LoadtoADL",
+					"rejectedDataLinkedService": {
+						"referenceName": "adls_dagc_proyecto",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
 			"transformations": [
 				{
 					"name": "selectCSV"
 				},
 				{
 					"name": "selectParquetfile"
+				},
+				{
+					"name": "UnionBothSources"
 				}
 			],
 			"scriptLines": [
@@ -77,7 +92,16 @@
 				"          EmailAddress",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectParquetfile"
+				"     skipDuplicateMapOutputs: true) ~> selectParquetfile",
+				"selectCSV, selectParquetfile union(byName: true)~> UnionBothSources",
+				"UnionBothSources sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0222,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> LoadtoADL"
 			]
 		}
 	}
