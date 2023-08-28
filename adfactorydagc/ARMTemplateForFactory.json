@@ -165,6 +165,51 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Unir datos",
+						"description": "Consolida datos del CSV con los clientes de la tabla leida de la BD",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Copiar datos CSV",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Copiar datos SQL ADB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.10:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "adfactory_df_dagc",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"adfactorydfs1csv": {},
+									"adfactorydfs2custparquet": {},
+									"LoadtoADL": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -177,7 +222,33 @@
 				"[concat(variables('factoryId'), '/datasets/adfactory_ds_data_dagc_csv')]",
 				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_myparquet')]",
 				"[concat(variables('factoryId'), '/datasets/adfactory_ds_sqldb_dagc')]",
-				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_Customer_parquet')]"
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_Customer_parquet')]",
+				"[concat(variables('factoryId'), '/dataflows/adfactory_df_dagc')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfactory_dagc_finalparquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Archivo Parquet con la union de las 2 fuentes",
+				"linkedServiceName": {
+					"referenceName": "adls_dagc_proyecto",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "processed"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adls_dagc_proyecto')]"
 			]
 		},
 		{
@@ -194,34 +265,71 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "data_e6ed1285-77f6-4728-864d-d1ecf088ccc9_d42c2bf8-1f9e-4114-a2af-ebc7eb364d69.parquet",
 						"fileSystem": "raw"
 					},
 					"compressionCodec": "snappy"
 				},
 				"schema": [
 					{
-						"name": "id",
+						"name": "CustomerID",
+						"type": "INT32"
+					},
+					{
+						"name": "NameStyle",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "Title",
 						"type": "UTF8"
 					},
 					{
-						"name": "firstname",
+						"name": "FirstName",
 						"type": "UTF8"
 					},
 					{
-						"name": "lastname",
+						"name": "MiddleName",
 						"type": "UTF8"
 					},
 					{
-						"name": "email",
+						"name": "LastName",
 						"type": "UTF8"
 					},
 					{
-						"name": "email2",
+						"name": "Suffix",
 						"type": "UTF8"
 					},
 					{
-						"name": "profession",
+						"name": "CompanyName",
 						"type": "UTF8"
+					},
+					{
+						"name": "SalesPerson",
+						"type": "UTF8"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "UTF8"
+					},
+					{
+						"name": "Phone",
+						"type": "UTF8"
+					},
+					{
+						"name": "PasswordHash",
+						"type": "UTF8"
+					},
+					{
+						"name": "PasswordSalt",
+						"type": "UTF8"
+					},
+					{
+						"name": "rowguid",
+						"type": "UTF8"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "INT96"
 					}
 				]
 			},
@@ -248,7 +356,7 @@
 						"type": "AzureBlobFSLocation",
 						"fileSystem": "raw"
 					},
-					"compressionCodec": "snappy"
+					"compressionCodec": "none"
 				},
 				"schema": []
 			},
@@ -559,6 +667,137 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfactory_df_dagc')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Dataflow de transformación",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "adfactory_ds_data_dagc_csv",
+								"type": "DatasetReference"
+							},
+							"name": "adfactorydfs1csv"
+						},
+						{
+							"dataset": {
+								"referenceName": "adfactory_ds_dagc_Customer_parquet",
+								"type": "DatasetReference"
+							},
+							"name": "adfactorydfs2custparquet"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "adfactory_dagc_finalparquet",
+								"type": "DatasetReference"
+							},
+							"name": "LoadtoADL",
+							"rejectedDataLinkedService": {
+								"referenceName": "adls_dagc_proyecto",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "selectCSV"
+						},
+						{
+							"name": "selectParquetfile"
+						},
+						{
+							"name": "UnionBothSources"
+						},
+						{
+							"name": "addCustomerIDstr"
+						},
+						{
+							"name": "selectParquetfile2"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          firstname as string,",
+						"          lastname as string,",
+						"          email as string,",
+						"          email2 as string,",
+						"          profession as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> adfactorydfs1csv",
+						"source(output(",
+						"          CustomerID as integer,",
+						"          NameStyle as boolean,",
+						"          Title as string,",
+						"          FirstName as string,",
+						"          MiddleName as string,",
+						"          LastName as string,",
+						"          Suffix as string,",
+						"          CompanyName as string,",
+						"          SalesPerson as string,",
+						"          EmailAddress as string,",
+						"          Phone as string,",
+						"          PasswordHash as string,",
+						"          PasswordSalt as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> adfactorydfs2custparquet",
+						"adfactorydfs1csv select(mapColumn(",
+						"          CustomerID_str = id,",
+						"          FirstName = firstname,",
+						"          LastName = lastname,",
+						"          EmailAddress = email",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectCSV",
+						"adfactorydfs2custparquet select(mapColumn(",
+						"          CustomerID,",
+						"          FirstName,",
+						"          LastName,",
+						"          EmailAddress",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectParquetfile",
+						"selectCSV, selectParquetfile2 union(byName: true)~> UnionBothSources",
+						"selectParquetfile derive(CustomerID_str = toString(CustomerID)) ~> addCustomerIDstr",
+						"addCustomerIDstr select(mapColumn(",
+						"          CustomerID_str,",
+						"          FirstName,",
+						"          LastName,",
+						"          EmailAddress",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectParquetfile2",
+						"UnionBothSources sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0222,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> LoadtoADL"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_data_dagc_csv')]",
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_Customer_parquet')]",
+				"[concat(variables('factoryId'), '/datasets/adfactory_dagc_finalparquet')]",
+				"[concat(variables('factoryId'), '/linkedServices/adls_dagc_proyecto')]"
+			]
 		}
 	]
 }
