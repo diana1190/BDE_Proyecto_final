@@ -1,0 +1,65 @@
+{
+	"name": "adfactory_df_dagc",
+	"properties": {
+		"description": "Dataflow de transformación",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "adfactory_ds_data_dagc_csv",
+						"type": "DatasetReference"
+					},
+					"name": "adfactorydfs1csv"
+				},
+				{
+					"dataset": {
+						"referenceName": "adfactory_ds_dagc_Customer_parquet",
+						"type": "DatasetReference"
+					},
+					"name": "adfactorydfs2custparquet"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          firstname as string,",
+				"          lastname as string,",
+				"          email as string,",
+				"          email2 as string,",
+				"          profession as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> adfactorydfs1csv",
+				"source(output(",
+				"          id as string,",
+				"          firstname as string,",
+				"          lastname as string,",
+				"          email as string,",
+				"          email2 as string,",
+				"          profession as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> adfactorydfs2custparquet",
+				"adfactorydfs2custparquet select(mapColumn(",
+				"          id,",
+				"          firstname,",
+				"          lastname,",
+				"          email,",
+				"          profession",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}
