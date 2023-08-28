@@ -1,0 +1,20 @@
+{
+	"name": "adfactory_dagc_finalparquet",
+	"properties": {
+		"description": "Archivo Parquet con la union de las 2 fuentes",
+		"linkedServiceName": {
+			"referenceName": "adls_dagc_proyecto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "processed"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
