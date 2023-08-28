@@ -99,7 +99,7 @@
 		],
 		"typeProperties": {
 			"schema": "SalesLT",
-			"table": "Product"
+			"table": "Customer"
 		}
 	}
 }

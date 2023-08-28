@@ -1,0 +1,44 @@
+{
+	"name": "adfactory_ds_dagc_Customer_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adls_dagc_proyecto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "raw"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "UTF8"
+			},
+			{
+				"name": "firstname",
+				"type": "UTF8"
+			},
+			{
+				"name": "lastname",
+				"type": "UTF8"
+			},
+			{
+				"name": "email",
+				"type": "UTF8"
+			},
+			{
+				"name": "email2",
+				"type": "UTF8"
+			},
+			{
+				"name": "profession",
+				"type": "UTF8"
+			}
+		]
+	}
+}
