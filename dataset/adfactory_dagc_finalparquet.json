@@ -6,6 +6,9 @@
 			"referenceName": "adls_dagc_proyecto",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "dp-bde-proyectofinal"
+		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
