@@ -1,0 +1,37 @@
+{
+	"name": "adfactorypl1dagc",
+	"properties": {
+		"description": "Ingresar datos al Data Lake",
+		"activities": [
+			{
+				"name": "Copiar datos",
+				"description": "Copy profile info and ingest it into data lake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "adfactory_ds_sqldb_dagc",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}

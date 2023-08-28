@@ -1,0 +1,51 @@
+{
+	"name": "adfactory_ds_data_dagc_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfactoryls_abs_data",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "dp-bde-proyectofinal"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "myFile.csv",
+				"container": "data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "firstname",
+				"type": "String"
+			},
+			{
+				"name": "lastname",
+				"type": "String"
+			},
+			{
+				"name": "email",
+				"type": "String"
+			},
+			{
+				"name": "email2",
+				"type": "String"
+			},
+			{
+				"name": "profession",
+				"type": "String"
+			}
+		]
+	}
+}
