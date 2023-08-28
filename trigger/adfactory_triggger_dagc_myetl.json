@@ -1,0 +1,26 @@
+{
+	"name": "adfactory_triggger_dagc_myetl",
+	"properties": {
+		"description": "Desencadenador de mi pipeline",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "adfactorypl1dagc",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 8,
+				"startTime": "2023-08-27T22:20:00Z",
+				"endTime": "2023-08-28T22:15:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
