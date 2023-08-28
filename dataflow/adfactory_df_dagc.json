@@ -42,6 +42,12 @@
 				},
 				{
 					"name": "UnionBothSources"
+				},
+				{
+					"name": "addCustomerIDstr"
+				},
+				{
+					"name": "selectParquetfile2"
 				}
 			],
 			"scriptLines": [
@@ -78,10 +84,10 @@
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> adfactorydfs2custparquet",
 				"adfactorydfs1csv select(mapColumn(",
-				"          CustomerID = id,",
+				"          CustomerID_str = id,",
 				"          FirstName = firstname,",
 				"          LastName = lastname,",
-				"          EmailAddress = email",
+				"          EmailAdress = email",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectCSV",
@@ -93,7 +99,16 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectParquetfile",
-				"selectCSV, selectParquetfile union(byName: true)~> UnionBothSources",
+				"selectCSV, selectParquetfile2 union(byName: true)~> UnionBothSources",
+				"selectParquetfile derive(CustomerID_str = toString(CustomerID)) ~> addCustomerIDstr",
+				"addCustomerIDstr select(mapColumn(",
+				"          CustomerID_str,",
+				"          FirstName,",
+				"          LastName,",
+				"          EmailAddress",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectParquetfile2",
 				"UnionBothSources sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
