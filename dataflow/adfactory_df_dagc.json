@@ -23,7 +23,10 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "select1"
+					"name": "selectCSV"
+				},
+				{
+					"name": "selectParquetfile"
 				}
 			],
 			"scriptLines": [
@@ -39,26 +42,42 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> adfactorydfs1csv",
 				"source(output(",
-				"          id as string,",
-				"          firstname as string,",
-				"          lastname as string,",
-				"          email as string,",
-				"          email2 as string,",
-				"          profession as string",
+				"          CustomerID as integer,",
+				"          NameStyle as boolean,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          PasswordHash as string,",
+				"          PasswordSalt as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> adfactorydfs2custparquet",
-				"adfactorydfs2custparquet select(mapColumn(",
+				"adfactorydfs1csv select(mapColumn(",
 				"          id,",
 				"          firstname,",
 				"          lastname,",
-				"          email,",
-				"          profession",
+				"          email",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> selectCSV",
+				"adfactorydfs2custparquet select(mapColumn(",
+				"          CustomerID,",
+				"          FirstName,",
+				"          LastName,",
+				"          EmailAddress",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectParquetfile"
 			]
 		}
 	}
