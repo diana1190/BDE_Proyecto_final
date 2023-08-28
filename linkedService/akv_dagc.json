@@ -1,0 +1,11 @@
+{
+	"name": "akv_dagc",
+	"properties": {
+		"description": "Boveda de claves para proyectos",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-dagc-proyectofinal.vault.azure.net/"
+		}
+	}
+}
