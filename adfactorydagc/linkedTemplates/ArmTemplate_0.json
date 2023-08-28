@@ -103,6 +103,55 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/adfactory_ds_dagc_Customer_parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adls_dagc_proyecto",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "raw"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "UTF8"
+					},
+					{
+						"name": "firstname",
+						"type": "UTF8"
+					},
+					{
+						"name": "lastname",
+						"type": "UTF8"
+					},
+					{
+						"name": "email",
+						"type": "UTF8"
+					},
+					{
+						"name": "email2",
+						"type": "UTF8"
+					},
+					{
+						"name": "profession",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/adls_dagc_proyecto')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/adfactory_ds_dagc_myparquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -235,85 +284,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/adfactorypl1dagc')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Ingresar datos al Data Lake",
-				"activities": [
-					{
-						"name": "Copiar datos",
-						"description": "Copy profile info and ingest it into data lake",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.00:10:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "FlattenHierarchy"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "adfactory_ds_data_dagc_csv",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "adfactory_ds_dagc_myparquet",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/adfactory_ds_data_dagc_csv')]",
-				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_myparquet')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/adfactory_ds_sqldb_dagc')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -416,11 +386,178 @@
 				],
 				"typeProperties": {
 					"schema": "SalesLT",
-					"table": "Product"
+					"table": "Customer"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/adfactory_ls_sqldb_dagc')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfactorypl1dagc')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Ingresar datos al Data Lake",
+				"activities": [
+					{
+						"name": "Copiar datos CSV",
+						"description": "Copy profile info and ingest it into data lake",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adfactory_ds_data_dagc_csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "adfactory_ds_dagc_myparquet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copiar datos SQL ADB",
+						"description": "Copiar datos de Tabla de SQL Azure database",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.10:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adfactory_ds_sqldb_dagc",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "adfactory_ds_dagc_Customer_parquet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_data_dagc_csv')]",
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_myparquet')]",
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_sqldb_dagc')]",
+				"[concat(variables('factoryId'), '/datasets/adfactory_ds_dagc_Customer_parquet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfactory_triggger_dagc_myetl')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Desencadenador de mi pipeline",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "adfactorypl1dagc",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 8,
+						"startTime": "2023-08-27T22:20:00Z",
+						"endTime": "2023-08-28T22:15:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/adfactorypl1dagc')]"
 			]
 		}
 	]
